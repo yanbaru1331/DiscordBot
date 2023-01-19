@@ -1,13 +1,15 @@
 FROM python:3.11
 
-RUN apt-get update && \
-    apt-get install -y libffi-dev libnacl-dev python3-dev && \
-    python3 -m pip install -U pip
+ENV PATH="/root/.local/bin:$PATH" 
 
-COPY requirements.txt .
-
-RUN python3 -m pip install -r requirements.txt
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /awesome
+
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry config virtualenvs.create false && \
+    poetry install
+
 
 ENTRYPOINT [ "/bin/bash" ]
