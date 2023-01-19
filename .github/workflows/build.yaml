@@ -27,6 +27,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: cffnpwr/awesome
+          flavor: |
+            latest=true
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
