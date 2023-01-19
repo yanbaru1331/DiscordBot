@@ -5,3 +5,5 @@ services:
     tty: true
     volumes:
       - .:/awesome
+    env_file:
+      - .env
