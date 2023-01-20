@@ -4,3 +4,4 @@ services:
     image: cffnpwr/awesome:latest
     env_file:
       - .env
+    restart: always
