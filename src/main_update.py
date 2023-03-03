@@ -6,7 +6,7 @@ from discord import app_commands
 #discordpy の機能で一部イベントの受け取り・スルーを制御できる=>通信量の削減
 intents = discord.Intents.all()  # デフォルトのIntentsオブジェクトを生成
 intents.typing = False  # typingを受け取らないように
-GUILD_ID = discord.Object(id=726304962639953921)
+GUILD_ID = discord.Object(id=727849192361558080)
 """
 client = commands.Bot(
     command_prefix = commands.when_mentioned_or("!"), 
@@ -39,7 +39,7 @@ kaze = "<:kaze:726379564829245491>"
 hikari = "<:hikari:726379564539838465>"
 yami = "<:yami:726379564502089780>"
 debuff = "<:arrow_double_down:>"
-fara = ":shield:"
+fara = ":KEYCAP TEN:"
 maru = ":o:"
 batu = "cross mark"
 
@@ -79,7 +79,7 @@ async def ping(interaction: discord.Integration, name:str, date:str="", comment:
         embed.add_field(name = "光",value = embedDefVal,inline = False)
         embed.add_field(name = "闇",value = embedDefVal,inline = False)
         embed.add_field(name = "弱体",value = embedDefVal,inline = False)
-        embed.add_field(name = "ファラ役",value = embedDefVal,inline = False)
+        embed.add_field(name = "10飛ばし",value = embedDefVal,inline = False)
         embed.add_field(name = "自発可",value = embedDefVal,inline = False)
         embed.add_field(name = "募集取り消し",value = interaction.user.name,inline = False)
         #embedの送信
@@ -96,7 +96,7 @@ async def ping(interaction: discord.Integration, name:str, date:str="", comment:
         await botMsg.add_reaction(hikari)
         await botMsg.add_reaction(yami)
         await botMsg.add_reaction('\N{BLACK DOWN-POINTING DOUBLE TRIANGLE}')
-        await botMsg.add_reaction('\N{SHIELD}')
+        await botMsg.add_reaction('\N{KEYCAP TEN}')
         await botMsg.add_reaction('\N{HEAVY LARGE CIRCLE}')
 
 
@@ -152,7 +152,7 @@ async def on_raw_reaction_add(payload) :
     elif str(payload.emoji) == "\N{BLACK DOWN-POINTING DOUBLE TRIANGLE}":
         targetFieldNum = 6
         targetFieldName = "弱体"
-    elif str(payload.emoji) =="\N{SHIELD}":
+    elif str(payload.emoji) =="\N{KEYCAP TEN}":
         targetFieldNum = 7
         targetFieldName = "ファラ役"
     elif str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}":
@@ -235,7 +235,7 @@ async def on_raw_reaction_remove(payload):
     elif str(payload.emoji) == "\N{BLACK DOWN-POINTING DOUBLE TRIANGLE}":
         targetFieldNum = 6
         targetFieldName = "弱体"
-    elif str(payload.emoji) == "\N{SHIELD}":
+    elif str(payload.emoji) == "\N{KEYCAP TEN}":
         targetFieldNum = 7
         targetFieldName = "ファラ役"
     elif str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}":
