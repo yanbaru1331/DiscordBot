@@ -100,6 +100,50 @@ async def ping(interaction: discord.Integration, name:str, date:str="", comment:
         await botMsg.add_reaction('\N{HEAVY LARGE CIRCLE}')
 
 
+@client.tree.command(name="spbh", description="スパバハ募集用コマンド")
+async def ping(interaction: discord.Integration,date:str="", comment:str=""):
+    #name=クエスト名,date=日時,comment=コメント
+        embed = discord.Embed( # Embedを定義する
+                        title="SPBH",# タイトル　将来的にここにコメントのmessageを取得して編集して代入
+                        color=0x00ff00, # フレーム色指定(今回は緑)
+                        description="SPBHのマルチ募集です\n開始時間:"+date+"~\n"+comment, # Embedの説明文 必要に応じて
+                        url="" # これを設定すると、タイトルが指定URLへのリンクになる
+                        )
+        embed.set_author(name=client.user, # Botのユーザー名
+                    #url="", # titleのurlのようにnameをリンクにできる。botのWebサイトとかGithubとか
+                    icon_url=client.user.display_avatar.url# Botのアイコンを設定してみる
+                    )
+
+        embed.add_field(name = "火",value = embedDefVal,inline = False) # フィールドを追加。
+        embed.add_field(name = "水",value = embedDefVal,inline = False)
+        embed.add_field(name = "土",value = embedDefVal,inline = False)
+        embed.add_field(name = "風",value = embedDefVal,inline = False)
+        embed.add_field(name = "光",value = embedDefVal,inline = False)
+        embed.add_field(name = "闇",value = embedDefVal,inline = False)
+        embed.add_field(name = "弱体",value = embedDefVal,inline = False)
+        embed.add_field(name = "10飛ばし",value = embedDefVal,inline = False)
+        embed.add_field(name = "自発可",value = embedDefVal,inline = False)
+        embed.add_field(name = "募集取り消し",value = interaction.user.name,inline = False)
+        #embedの送信
+        await interaction.response.send_message(embed=embed)
+        
+        #インタラクションに関連付けられたメッセージの取得(ここではsendしたメッセージ)
+        botMsg = await interaction.original_response()
+        
+        #取得したコメントに属性などのスタンプを送信
+        await botMsg.add_reaction(hi)
+        await botMsg.add_reaction(mizu)
+        await botMsg.add_reaction(thuchi)
+        await botMsg.add_reaction(kaze)
+        await botMsg.add_reaction(hikari)
+        await botMsg.add_reaction(yami)
+        await botMsg.add_reaction('\N{BLACK DOWN-POINTING DOUBLE TRIANGLE}')
+        await botMsg.add_reaction('\N{KEYCAP TEN}')
+        await botMsg.add_reaction('\N{HEAVY LARGE CIRCLE}')
+
+
+
+
 @client.event
 #スタンプが追加されたときの処理
 async def on_raw_reaction_add(payload) :
