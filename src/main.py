@@ -1,5 +1,5 @@
 import discord
-import datetime, os, math, pytz
+import datetime, os, math, pytz, re
 from discord.ext import commands
 from discord import app_commands
 
@@ -95,7 +95,7 @@ niti = "<:w_niti:1091758158701150268>"
 embedDefVal = "参加者は居ません"
 
 #BOT動作に必要な定数
-TOKEN =os.environ.get("DISCORD_TOKEN")
+TOKEN = os.environ.get("DISCORD_TOKEN")
 
 @client.event
 async def on_ready():
@@ -283,9 +283,10 @@ async def on_raw_reaction_add(payload) :
     if memberObject.bot == True:
         return
     #message_idを元に編集対象のmessageオブジェクトを取得
-
     targetMessage = await channel.fetch_message(payload.message_id)
     
+    #人数入力する処理の確認
+    targetFlag = False
     #embed取得時にエラー吐くとエラーとして返す
     try :
         #対象のembedを取得(埋め込み)
@@ -328,24 +329,31 @@ async def on_raw_reaction_add(payload) :
     elif str(payload.emoji) == "<:w_getu:1091758148622221472>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 1
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
+        targetFlag = True
     elif str(payload.emoji) == "<:w_ka:1091758139902275745>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 2
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
+        targetFlag = True
     elif str(payload.emoji) == "<:w_sui:1091758127906570291>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 3
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
+        targetFlag = True
     elif str(payload.emoji) == "<:w_moku:1091758119345987664>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 4
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
+        targetFlag = True
     elif str(payload.emoji) == "<:w_kin:1091758107450949744>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 5
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
+        targetFlag = True
     elif str(payload.emoji) == "<:w_do:1091758168134131857>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 6
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
+        targetFlag = True
     elif str(payload.emoji) == "<:w_niti:1091758158701150268>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
+        targetFlag = True
     elif str(payload.emoji) == "\N{cross mark}" and targetEmbeds.fields[-1].value == memberObject.name:
         await targetMessage.delete() 
         return
@@ -364,6 +372,9 @@ async def on_raw_reaction_add(payload) :
         print(payload.member.name,"is already there.")
         return  
     
+    if targetFlag == True and editFieldValue != embedDefVal:
+        targetFieldNameAdd = '〜  ' + str(editFieldValue.count(',') + 1) + '人'
+        targetFieldName = re.sub('〜[\s]*.*$', targetFieldNameAdd, targetFieldName)
     #既存フィールドの編集 エラーの場合ログを吐いてreturn
     ####消すな####
     try :
@@ -429,24 +440,31 @@ async def on_raw_reaction_remove(payload):
         targetFieldName = "自発可"
     elif str(payload.emoji) == "<:w_getu:1091758148622221472>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 1
+        targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_ka:1091758139902275745>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 2
+        targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_sui:1091758127906570291>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 3
+        targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_moku:1091758119345987664>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 4
+        targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_kin:1091758107450949744>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 5
+        targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_do:1091758168134131857>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 6
+        targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_niti:1091758158701150268>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
+        targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     else:
         print("対象外のスタンプです")
@@ -472,6 +490,13 @@ async def on_raw_reaction_remove(payload):
         #(複数)
         editFieldValue = targetEmbeds.fields[targetFieldNum].value.replace(","+memberObject.name, '')
 
+
+    if targetFlag == True and editFieldValue != embedDefVal:
+        targetFieldNameAdd = '〜  ' + str(editFieldValue.count(',') + 1) + '人'
+        targetFieldName = re.sub('〜[\s]*.*$', targetFieldNameAdd, targetFieldName)
+    elif editFieldValue == embedDefVal:
+        targetFieldName = re.sub('〜[\s]*.*$', '〜', targetFieldName)
+    
     #エラーの場合ログを吐いてreturn
     try :
         targetEmbeds.set_field_at(targetFieldNum, name=targetFieldName, value=editFieldValue, inline=False)
