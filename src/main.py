@@ -298,6 +298,9 @@ async def on_raw_reaction_add(payload) :
     #押したユーザの取得
     print (payload.member.name,"がスタンプ",payload.emoji.name,"を押しました/time",datetime.datetime.now().time())
 
+    #書き換えのフラグ(初期否定)
+    targetFlag = False
+
     #スタンプが押された場合のスタンプ種類の認識
     if str(payload.emoji) == "<:hi:726379564816793600>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
@@ -410,6 +413,9 @@ async def on_raw_reaction_remove(payload):
     
     print (memberObject.name,"がスタンプ",payload.emoji.name,"を取り消しました/time",datetime.datetime.now().time())
 
+    #書き換えのフラグ(初期否定)
+    targetFlag = False
+
     #スタンプが押された場合のスタンプ種類の認識
     if str(payload.emoji) == "<:hi:726379564816793600>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
@@ -494,7 +500,7 @@ async def on_raw_reaction_remove(payload):
     if targetFlag == True and editFieldValue != embedDefVal:
         targetFieldNameAdd = '〜  ' + str(editFieldValue.count(',') + 1) + '人'
         targetFieldName = re.sub('〜[\s]*.*$', targetFieldNameAdd, targetFieldName)
-    elif editFieldValue == embedDefVal:
+    elif editFieldValue == embedDefVal and targetFlag == True:
         targetFieldName = re.sub('〜[\s]*.*$', '〜', targetFieldName)
     
     #エラーの場合ログを吐いてreturn
