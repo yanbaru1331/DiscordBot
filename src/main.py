@@ -7,7 +7,8 @@ from discord import app_commands
 intents = discord.Intents.all()  # デフォルトのIntentsオブジェクトを生成
 intents.typing = False  # typingを受け取らないように
 GUILD_ID = discord.Object(id=726304962639953921)
-
+#solt 727849192361558080
+#serpent 726304962639953921
 class Myclient(discord.Client):
     def __init__(self, intents: discord.Intents):
         super().__init__(
@@ -66,6 +67,53 @@ class DayofWeek:
         else:
             return 28
 
+    def stampYoubi(self):
+        temp = self.ZellerCount % 7
+        if temp == 0:
+            kanaDow = "<:w_niti:1091758158701150268>"
+        elif temp == 1:
+            kanaDow = "<:w_getu:1091758148622221472>"
+        elif temp == 2:
+            kanaDow = "<:w_ka:1091758139902275745>"
+        elif temp == 3:
+            kanaDow = "<:w_sui:1091758127906570291>"
+        elif temp == 4:
+            kanaDow = "<:w_moku:1091758119345987664>"
+        elif temp == 5:
+            kanaDow = "<:w_kin:1091758107450949744>"
+        elif temp == 6:
+            kanaDow = "<:w_do:1091758168134131857>"
+        return kanaDow
+
+
+def getDoW(count:int):
+    temp = count % 7
+    if temp == 0:
+        textDow = "日"
+    elif temp == 1:
+        textDow = "月"
+    elif temp == 2:
+        textDow = "火"
+    elif temp == 3:
+        textDow = "水"
+    elif temp == 4:
+        textDow = "木"
+    elif temp == 5:
+        textDow = "金"
+    elif temp == 6:
+        textDow = "土"
+    return textDow
+
+def searchDoW(Embed:discord.Embed, DoW: int):
+    pattern = "[" + getDoW(DoW) + "]"
+    for i in range(7):
+        match = re.search(pattern, Embed.fields[i].name)
+        if match != None:
+            matchDoW = i
+            break
+    
+    return matchDoW
+
 client = Myclient(intents=intents)
 #起動確認
 print(intents.members)
@@ -96,7 +144,6 @@ embedDefVal = "参加者は居ません"
 
 #BOT動作に必要な定数
 TOKEN = os.environ.get("DISCORD_TOKEN")
-
 @client.event
 async def on_ready():
     #起動後PC側にメッセージ送信
@@ -185,6 +232,31 @@ async def ping(interaction: discord.Integration,date:str="", comment:str=""):
         await botMsg.add_reaction('\N{KEYCAP TEN}')
         await botMsg.add_reaction('\N{HEAVY LARGE CIRCLE}')
 
+@client.tree.command(name="spbh_zihatu", description="スパバハ自発募集用コマンド")
+async def ping(interaction: discord.Integration,date:str="", comment:str=""):
+    #name=クエスト名,date=日時,comment=コメント
+        embed = discord.Embed( # Embedを定義する
+                        title="SPBH自発募集",# タイトル　将来的にここにコメントのmessageを取得して編集して代入
+                        color=0xFFA500, # フレーム色指定(今回は緑)
+                        description="SPBHのマルチ募集です\n開始時間:"+date+"~\n"+comment, # Embedの説明文 必要に応じて
+                        url="" # これを設定すると、タイトルが指定URLへのリンクになる
+                        )
+        embed.set_author(name=client.user, # Botのユーザー名
+                    #url="", # titleのurlのようにnameをリンクにできる。botのWebサイトとかGithubとか
+                    icon_url=client.user.display_avatar.url# Botのアイコンを設定してみる
+                    )
+
+        embed.add_field(name = "自発可",value = embedDefVal,inline = False)
+        embed.add_field(name = "募集取り消し",value = interaction.user.name,inline = False)
+        #embedの送信
+        await interaction.response.send_message(embed=embed)
+        
+        #インタラクションに関連付けられたメッセージの取得(ここではsendしたメッセージ)
+        botMsg = await interaction.original_response()
+        
+        #取得したコメントに属性などのスタンプを送信
+        await botMsg.add_reaction('\N{HEAVY LARGE CIRCLE}')
+        
 @client.tree.command(name="spbh_date", description="スパバハ放置狩りスケジュール調整")
 async def spbhdate(interaction: discord.Integration,date:int, comment:str=""):
     await interaction.response.defer()
@@ -223,6 +295,7 @@ async def spbhdate(interaction: discord.Integration,date:int, comment:str=""):
         temp.day = DoW.day
         temp.month = DoW.month
         temp.ZellerCount = DoW.ZellerCount
+        temp.youbi = DoW.stampYoubi()
         #元の日付を一日ずらして繰り上げ確認
         DoW.day += 1
         DoW.ZellerCount += 1
@@ -230,22 +303,11 @@ async def spbhdate(interaction: discord.Integration,date:int, comment:str=""):
         DoW.checkMonth()
     
     daylist = [d1, d2, d3, d4, d5, d6, d7]
-    daylist = sorted(daylist, key=lambda x: x.ZellerCount % 7)
+    #daylist = sorted(daylist, key=lambda x: x.ZellerCount % 7)
     
-    #日曜処理
-    embed.add_field(name =(f"{str(daylist[0].month)}/{str(daylist[0].day)} 日 22:00〜"),value = embedDefVal,inline = False)
-    #月曜処理 
-    embed.add_field(name =(f"{str(daylist[1].month)}/{str(daylist[1].day)} 月 22:00〜"),value = embedDefVal,inline = False)
-    #火曜処理 
-    embed.add_field(name =(f"{str(daylist[2].month)}/{str(daylist[2].day)} 火 22:00〜"),value = embedDefVal,inline = False)
-    #水曜処理 
-    embed.add_field(name =(f"{str(daylist[3].month)}/{str(daylist[3].day)} 水 22:00〜"),value = embedDefVal,inline = False)
-    #木曜処理 
-    embed.add_field(name =(f"{str(daylist[4].month)}/{str(daylist[4].day)} 木 22:00〜"),value = embedDefVal,inline = False)
-    #金曜処理 
-    embed.add_field(name =(f"{str(daylist[5].month)}/{str(daylist[5].day)} 金 22:00〜"),value = embedDefVal,inline = False)
-    #土曜処理
-    embed.add_field(name =(f"{str(daylist[6].month)}/{str(daylist[6].day)} 土 22:00〜"),value = embedDefVal,inline = False)
+    #フィールド処理
+    for i in range(7):
+        embed.add_field(name =(f"{str(daylist[i].month)}/{str(daylist[i].day)} {getDoW(daylist[i].ZellerCount)} 22:00〜"),value = embedDefVal,inline = False)
 
     #取り消し用フィールド(なくてもいいかも)
     embed.add_field(name = "募集取り消し",value = interaction.user.name,inline = False)
@@ -256,14 +318,11 @@ async def spbhdate(interaction: discord.Integration,date:int, comment:str=""):
     botMsg = await interaction.original_response()
 
     #曜日スタンプ送信
-    await botMsg.add_reaction(getu)
-    await botMsg.add_reaction(ka)
-    await botMsg.add_reaction(sui)
-    await botMsg.add_reaction(moku)
-    await botMsg.add_reaction(kin)
-    await botMsg.add_reaction(do)
-    await botMsg.add_reaction(niti)
-
+#    await botMsg.add_reaction(getu)
+    for i in range(7):
+        hoge = str(daylist[i].youbi)
+        await botMsg.add_reaction(hoge)
+    
     #classの削除
     del DoW, d1, d2, d3, d4, d5, d6, d7
 
@@ -298,11 +357,11 @@ async def on_raw_reaction_add(payload) :
     #押したユーザの取得
     print (payload.member.name,"がスタンプ",payload.emoji.name,"を押しました/time",datetime.datetime.now().time())
 
-    #書き換えのフラグ(初期否定)
-    targetFlag = False
-
     #スタンプが押された場合のスタンプ種類の認識
-    if str(payload.emoji) == "<:hi:726379564816793600>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    if str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}" and targetEmbeds.title == "SPBH自発募集":
+        targetFieldNum = 0
+        targetFieldName = "自発可"
+    elif str(payload.emoji) == "<:hi:726379564816793600>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
         targetFieldName = "火"
     elif str(payload.emoji) == "<:mizu:726379564791758848>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
@@ -330,31 +389,38 @@ async def on_raw_reaction_add(payload) :
         targetFieldNum = 8
         targetFieldName = "自発可"
     elif str(payload.emoji) == "<:w_getu:1091758148622221472>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 1
+        stampNum = 1
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
     elif str(payload.emoji) == "<:w_ka:1091758139902275745>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 2
+        stampNum = 2
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
     elif str(payload.emoji) == "<:w_sui:1091758127906570291>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 3
+        stampNum = 3
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
     elif str(payload.emoji) == "<:w_moku:1091758119345987664>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 4
+        stampNum = 4
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
     elif str(payload.emoji) == "<:w_kin:1091758107450949744>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 5
+        stampNum = 5
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
     elif str(payload.emoji) == "<:w_do:1091758168134131857>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 6
+        stampNum = 6
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
     elif str(payload.emoji) == "<:w_niti:1091758158701150268>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 0
+        stampNum = 0
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
     elif str(payload.emoji) == "\N{cross mark}" and targetEmbeds.fields[-1].value == memberObject.name:
@@ -412,10 +478,7 @@ async def on_raw_reaction_remove(payload):
         return
     
     print (memberObject.name,"がスタンプ",payload.emoji.name,"を取り消しました/time",datetime.datetime.now().time())
-
-    #書き換えのフラグ(初期否定)
     targetFlag = False
-
     #スタンプが押された場合のスタンプ種類の認識
     if str(payload.emoji) == "<:hi:726379564816793600>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
@@ -445,31 +508,38 @@ async def on_raw_reaction_remove(payload):
         targetFieldNum = 8
         targetFieldName = "自発可"
     elif str(payload.emoji) == "<:w_getu:1091758148622221472>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 1
+        stampNum = 1
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_ka:1091758139902275745>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 2
+        stampNum = 2
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_sui:1091758127906570291>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 3
+        stampNum = 3
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_moku:1091758119345987664>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 4
+        stampNum = 4
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_kin:1091758107450949744>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 5
+        stampNum = 5
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_do:1091758168134131857>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 6
+        stampNum = 6
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     elif str(payload.emoji) == "<:w_niti:1091758158701150268>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
-        targetFieldNum = 0
+        stampNum = 7
+        targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
     else:
