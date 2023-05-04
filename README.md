@@ -41,4 +41,4 @@ python3.11 main.py
 ```
 
 ## Special thanks
-git hub@cffnpwr
+https://github.com/cffnpwr
