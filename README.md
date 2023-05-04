@@ -12,7 +12,7 @@ docker build -t 任意のイメージ名 .
 docker compose build --no-cache
 docker compose up -d
 docker container ps
-docker exec -it 控えたCONTAIENR ID bash
+docker exec -it 控えたCONTAIENR_ID bash
 ```
 
 ```bash
@@ -34,4 +34,11 @@ python3.11 main.py
 放置狩りスケジュール調整コマンド　日付を入力
 入力された日付から1週間のカレンダーを出力
 参加者は参加する曜日のスタンプを押す
+
+/spbh_zihatu
+自発放置用コマンド　日付を入力
+自発参加する方が:o:のスタンプを押す
 ```
+
+## Special thanks
+git hub@cffnpwr
