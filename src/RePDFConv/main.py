@@ -26,7 +26,6 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(name="!pdfでPDFをjpgに" ,type = discord.ActivityType.playing))
 @client.command() 
 async def pdf(ctx, *args):
-    #"/"コマンドなので可変長の確保ができない=*prmなどの使用ができない、引数以外が入るとエラーを起こす->
     #BOTの除外
     #スレッドIDの取得ができない -> parentのオブジェクトがあるかどうかで判断
     try :
@@ -62,7 +61,7 @@ async def pdf(ctx, *args):
     #ファイル添付の場合の処理
     #送信されたメッセージに添付ファイルがあることを確認
     if ctx.message.attachments != []:
-        #スレッドで呼び出されたらそのスレッド内で完結するようにする、呼ばれてないなら
+        #スレッドで呼び出されたらそのスレッド内で完結するようにする、呼ばれてないなら新規スレッド作成してそこに送信
         if thFlug == 0:
             thread = await ctx.message.create_thread(
                 name=(f"{ctx.message.id} conversion image"),
