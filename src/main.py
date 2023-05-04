@@ -6,9 +6,9 @@ from discord import app_commands
 #discordpy の機能で一部イベントの受け取り・スルーを制御できる=>通信量の削減
 intents = discord.Intents.all()  # デフォルトのIntentsオブジェクトを生成
 intents.typing = False  # typingを受け取らないように
-GUILD_ID = discord.Object(id=726304962639953921)
-#solt 727849192361558080
-#serpent 726304962639953921
+idNum = int(TOKEN = os.environ.get("GUILD_ID"))
+GUILD_ID = discord.Object(id=idNum)
+
 class Myclient(discord.Client):
     def __init__(self, intents: discord.Intents):
         super().__init__(
@@ -70,19 +70,19 @@ class DayofWeek:
     def stampYoubi(self):
         temp = self.ZellerCount % 7
         if temp == 0:
-            kanaDow = "<:w_niti:1091758158701150268>"
+            kanaDow = "<:w_niti:>"
         elif temp == 1:
-            kanaDow = "<:w_getu:1091758148622221472>"
+            kanaDow = "<:w_getu:>"
         elif temp == 2:
-            kanaDow = "<:w_ka:1091758139902275745>"
+            kanaDow = "<:w_ka:>"
         elif temp == 3:
-            kanaDow = "<:w_sui:1091758127906570291>"
+            kanaDow = "<:w_sui:>"
         elif temp == 4:
-            kanaDow = "<:w_moku:1091758119345987664>"
+            kanaDow = "<:w_moku:>"
         elif temp == 5:
-            kanaDow = "<:w_kin:1091758107450949744>"
+            kanaDow = "<:w_kin:>"
         elif temp == 6:
-            kanaDow = "<:w_do:1091758168134131857>"
+            kanaDow = "<:w_do:>"
         return kanaDow
 
 
@@ -119,25 +119,25 @@ client = Myclient(intents=intents)
 print(intents.members)
 
 #リアクション定義(ユニコード絵文字は直接貼り付け、カスタムスタンプは<:stumpName:stumpId>)
-hi = "<:hi:726379564816793600>"
-mizu = "<:mizu:726379564791758848>"
-thuchi = "<:thuchi:726379564623724595>"
-kaze = "<:kaze:726379564829245491>"
-hikari = "<:hikari:726379564539838465>"
-yami = "<:yami:726379564502089780>"
+hi = "<:hi:>"
+mizu = "<:mizu:>"
+thuchi = "<:thuchi:>"
+kaze = "<:kaze:>"
+hikari = "<:hikari:>"
+yami = "<:yami:>"
 debuff = "<:arrow_double_down:>"
 fara = ":KEYCAP TEN:"
 maru = ":o:"
 batu = "cross mark"
 
 
-getu ="<:w_getu:1091758148622221472>"
-ka = "<:w_ka:1091758139902275745>"
-sui = "<:w_sui:1091758127906570291>"
-moku = "<:w_moku:1091758119345987664>"
-kin = "<:w_kin:1091758107450949744>"
-do = "<:w_do:1091758168134131857>"
-niti = "<:w_niti:1091758158701150268>"
+getu ="<:w_getu:>"
+ka = "<:w_ka:>"
+sui = "<:w_sui:>"
+moku = "<:w_moku:>"
+kin = "<:w_kin:>"
+do = "<:w_do:>"
+niti = "<:w_niti:>"
 
 #embedのVal定義
 embedDefVal = "参加者は居ません"
@@ -232,11 +232,11 @@ async def ping(interaction: discord.Integration,date:str="", comment:str=""):
         await botMsg.add_reaction('\N{KEYCAP TEN}')
         await botMsg.add_reaction('\N{HEAVY LARGE CIRCLE}')
 
-@client.tree.command(name="spbh_zihatu", description="スパバハ自発募集用コマンド")
+@client.tree.command(name="spbh_zihatu", description="自発放置募集用コマンド")
 async def ping(interaction: discord.Integration,date:str="", comment:str=""):
     #name=クエスト名,date=日時,comment=コメント
         embed = discord.Embed( # Embedを定義する
-                        title="SPBH自発募集",# タイトル　将来的にここにコメントのmessageを取得して編集して代入
+                        title="SPBH自発放置募集",# タイトル　将来的にここにコメントのmessageを取得して編集して代入
                         color=0xFFA500, # フレーム色指定(今回は緑)
                         description="SPBHのマルチ募集です\n開始時間:"+date+"~\n"+comment, # Embedの説明文 必要に応じて
                         url="" # これを設定すると、タイトルが指定URLへのリンクになる
@@ -358,25 +358,25 @@ async def on_raw_reaction_add(payload) :
     print (payload.member.name,"がスタンプ",payload.emoji.name,"を押しました/time",datetime.datetime.now().time())
 
     #スタンプが押された場合のスタンプ種類の認識
-    if str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}" and targetEmbeds.title == "SPBH自発募集":
+    if str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}" and targetEmbeds.title == "SPBH自発放置募集":
         targetFieldNum = 0
         targetFieldName = "自発可"
-    elif str(payload.emoji) == "<:hi:726379564816793600>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:hi:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
         targetFieldName = "火"
-    elif str(payload.emoji) == "<:mizu:726379564791758848>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:mizu:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 1
         targetFieldName = "水"
-    elif str(payload.emoji) == "<:thuchi:726379564623724595>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:thuchi:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 2
         targetFieldName = "土"
-    elif str(payload.emoji) == "<:kaze:726379564829245491>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:kaze:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 3
         targetFieldName = "風"
-    elif str(payload.emoji) == "<:hikari:726379564539838465>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:hikari:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 4
         targetFieldName = "光"
-    elif str(payload.emoji) == "<:yami:726379564502089780>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:yami:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 5
         targetFieldName = "闇"
     elif str(payload.emoji) == "\N{BLACK DOWN-POINTING DOUBLE TRIANGLE}" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
@@ -388,37 +388,37 @@ async def on_raw_reaction_add(payload) :
     elif str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 8
         targetFieldName = "自発可"
-    elif str(payload.emoji) == "<:w_getu:1091758148622221472>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_getu:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 1
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
-    elif str(payload.emoji) == "<:w_ka:1091758139902275745>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_ka:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 2
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
-    elif str(payload.emoji) == "<:w_sui:1091758127906570291>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_sui:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 3
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
-    elif str(payload.emoji) == "<:w_moku:1091758119345987664>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_moku:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 4
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
-    elif str(payload.emoji) == "<:w_kin:1091758107450949744>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_kin:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 5
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
-    elif str(payload.emoji) == "<:w_do:1091758168134131857>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_do:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 6
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
         targetFlag = True
-    elif str(payload.emoji) == "<:w_niti:1091758158701150268>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_niti:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 0
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
@@ -480,22 +480,25 @@ async def on_raw_reaction_remove(payload):
     print (memberObject.name,"がスタンプ",payload.emoji.name,"を取り消しました/time",datetime.datetime.now().time())
     targetFlag = False
     #スタンプが押された場合のスタンプ種類の認識
-    if str(payload.emoji) == "<:hi:726379564816793600>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    if str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}" and targetEmbeds.title == "SPBH自発放置募集":
+        targetFieldNum = 0
+        targetFieldName = "自発可"
+    elif str(payload.emoji) == "<:hi:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 0
         targetFieldName = "火"
-    elif str(payload.emoji) == "<:mizu:726379564791758848>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:mizu:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 1
         targetFieldName = "水"
-    elif str(payload.emoji) == "<:thuchi:726379564623724595>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:thuchi:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 2
         targetFieldName = "土"
-    elif str(payload.emoji) == "<:kaze:726379564829245491>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:kaze:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 3
         targetFieldName = "風"
-    elif str(payload.emoji) == "<:hikari:726379564539838465>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:hikari:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 4
         targetFieldName = "光"
-    elif str(payload.emoji) == "<:yami:726379564502089780>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:yami:>" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 5
         targetFieldName = "闇"
     elif str(payload.emoji) == "\N{BLACK DOWN-POINTING DOUBLE TRIANGLE}" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
@@ -507,37 +510,37 @@ async def on_raw_reaction_remove(payload):
     elif str(payload.emoji) == "\N{HEAVY LARGE CIRCLE}" and targetEmbeds.title != "スパバハ放置狩りスケジュール":
         targetFieldNum = 8
         targetFieldName = "自発可"
-    elif str(payload.emoji) == "<:w_getu:1091758148622221472>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_getu:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 1
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
-    elif str(payload.emoji) == "<:w_ka:1091758139902275745>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_ka:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 2
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
-    elif str(payload.emoji) == "<:w_sui:1091758127906570291>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_sui:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 3
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
-    elif str(payload.emoji) == "<:w_moku:1091758119345987664>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_moku:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 4
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
-    elif str(payload.emoji) == "<:w_kin:1091758107450949744>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_kin:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 5
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
-    elif str(payload.emoji) == "<:w_do:1091758168134131857>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_do:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 6
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
         targetFieldName = targetEmbeds.fields[targetFieldNum].name
-    elif str(payload.emoji) == "<:w_niti:1091758158701150268>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
+    elif str(payload.emoji) == "<:w_niti:>" and targetEmbeds.title == "スパバハ放置狩りスケジュール":
         stampNum = 7
         targetFieldNum = searchDoW(targetEmbeds, stampNum)
         targetFlag = True
