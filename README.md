@@ -1,4 +1,4 @@
-# GDF Discord BOT
+# Discord BOT
 ソシャゲマルチ募集用discord bot
 ## 環境
 ```
